@@ -12,12 +12,12 @@ const contactSchema = new mongoose.Schema({
   email: {
     type: String,
     validate: {
-        validator: function(v) {
-            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+        validator: function(email) {
+            return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
         },
-        message: props => `${props.value} is not a valid email!`
+        message: props => `${props.value} is not a valid email!`,
     },
-    required: true,
+    required: [true, 'Email is required!'],
   },
   isFavourite: {
     type: Boolean,
@@ -34,4 +34,4 @@ const contactSchema = new mongoose.Schema({
 });
 
 const ContactsCollection = mongoose.model('Contact', contactSchema); // contacts
-export default ContactsCollection; 
+export default ContactsCollection;
