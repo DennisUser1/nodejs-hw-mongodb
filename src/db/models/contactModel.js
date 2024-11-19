@@ -17,7 +17,6 @@ const contactSchema = new mongoose.Schema({
         },
         message: props => `${props.value} is not a valid email!`,
     },
-    required: [true, 'Email is required!'],
   },
   isFavourite: {
     type: Boolean,
