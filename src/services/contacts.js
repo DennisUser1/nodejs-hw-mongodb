@@ -19,7 +19,7 @@ export const updateContactService = async (contactId, updateDate) => {
   const updatedContact = await ContactsCollection.findByIdAndUpdate(
     contactId,
     updateDate,
-    { new: true },
+    { new: true }
   );
   return updatedContact;
 };

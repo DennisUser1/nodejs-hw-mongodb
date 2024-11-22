@@ -29,7 +29,7 @@ const contactSchema = new mongoose.Schema({
     default: 'personal',
   }
 }, {
-  timestamps: true
+  timestamps: true,
 });
 
 const ContactsCollection = mongoose.model('Contact', contactSchema); // contacts

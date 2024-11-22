@@ -1,7 +1,7 @@
 {
   "name": "nodejs-hw-mongodb",
   "version": "1.0.0",
-  "description": "nodejs-hw-mongodb",
+  "description": "branch hw3-crud",
   "main": "src/index.js",
   "type": "module",
   "scripts": {
