@@ -1,8 +1,43 @@
 import ContactsCollection from '../db/models/contactModel.js';
+import calculatePaginationData from '../utils/calculatePaginationData.js';
+import { sortOrderList } from '../constants/constants.js';
 
-export const getAllContactsService = async (req, res) => {
-  const contacts = await ContactsCollection.find();
-  return contacts;
+export const getAllContactsService = async ({
+  page = 1,
+  perPage = 10,
+  sortBy = '_id',
+  sortOrder = sortOrderList[0],
+  filter = {},
+}) => {
+  
+  if (!sortOrderList.includes(sortOrder)) {
+    sortOrder = sortOrderList[0];
+  }
+  
+  const contactsQuery = ContactsCollection.find();
+  if (typeof filter.contactType !== 'undefined') {
+    contactsQuery.where('contactType').equals(filter.contactType);
+  }
+  if (typeof filter.isFavourite !== 'undefined') {
+    contactsQuery.where('isFavourite').equals(filter.isFavourite === 'true');
+  }
+
+  const skip = page > 0 ? (page - 1) * perPage : 0;
+  const [total, contacts] = await Promise.all([
+    ContactsCollection.find(contactsQuery).countDocuments(),
+    contactsQuery
+      .skip(skip)
+      .limit(perPage)
+      .sort({ [sortBy]: sortOrder === sortOrderList[1] ? -1 : 1 })
+      .exec(),
+  ]);
+
+  const paginationData = calculatePaginationData({ total, page, perPage });
+
+  return {
+    contacts,
+    ...paginationData,
+  };
 };
 
 export const getContactByIdService = async (contactId) => {
@@ -19,12 +54,12 @@ export const updateContactService = async (contactId, updateDate) => {
   const updatedContact = await ContactsCollection.findByIdAndUpdate(
     contactId,
     updateDate,
-    { new: true }
+    { new: true },
   );
   return updatedContact;
 };
 
 export async function deleteContactService(contactId) {
- const contact = await ContactsCollection.findByIdAndDelete(contactId);
- return contact;
+  const contact = await ContactsCollection.findByIdAndDelete(contactId);
+  return contact;
 }

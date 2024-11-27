@@ -5,15 +5,31 @@ import {
   updateContactService,
   deleteContactService,
 } from '../services/contacts.js';
+import { parsePaginationParams } from '../utils/parsePaginationParams.js';
+import { parseSortParams } from '../utils/parseSortParams.js';
+import { parseFilterParams } from '../utils/parseFilterParams.js';
 import httpErrors from 'http-errors';
+import mongoose from 'mongoose';
 
 export const getAllContactsController = async (req, res, next) => {
   try {
-    const contacts = await getAllContactsService();
+    const { page, perPage } = parsePaginationParams(req.query);
+    const { sortBy, sortOrder } = parseSortParams(req.query);
+    const filter = parseFilterParams(req.query);
+
+    const contacts = await getAllContactsService({page, perPage, sortBy, sortOrder, filter});
     res.status(200).json({
       status: 200,
       message: 'Successfully found contacts!',
-      data: contacts,
+      data: {
+        data: contacts.contacts, 
+        page: contacts.page,
+        perPage: contacts.perPage,
+        totalItems: contacts.totalItems,
+        totalPages: contacts.totalPages,
+        hasPreviousPage: contacts.hasPreviousPage,
+        hasNextPage: contacts.hasNextPage,
+      }
     });
   } catch (error) {
     next(error);
@@ -21,9 +37,13 @@ export const getAllContactsController = async (req, res, next) => {
 };
 
 export const getContactByIdController = async (req, res, next) => {
-  const { contactId } = req.params;
-
   try {
+    const { contactId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(contactId)) {
+      return next(httpErrors(400, 'Invalid ID format'));
+  }
+
     const contact = await getContactByIdService(contactId);
     if (!contact) {
       throw httpErrors(404, `Contact with id ${contactId} not found`);
@@ -84,6 +104,11 @@ export const updateContactController = async (req, res, next) => {
 export const deleteContactController = async (req, res, next) => {
   try {
     const { contactId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(contactId)) {
+      return next(httpErrors(400, 'Invalid ID format'));
+    }
+    
     const deletedContact = await deleteContactService(contactId);
     if (!deletedContact) {
       throw httpErrors(404, 'Contact not found');

@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { contactTypeList, phoneNumberPattern, emailPattern } from '../../constants/constants.js';
 
 const contactSchema = new mongoose.Schema({
   name: {
@@ -7,16 +8,12 @@ const contactSchema = new mongoose.Schema({
   },
   phoneNumber: {
     type: String,
+    match: phoneNumberPattern,
     required: [true, 'Set phone number for contact'],
   },
   email: {
     type: String,
-    validate: {
-        validator: function(email) {
-            return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
-        },
-        message: props => `${props.value} is not a valid email!`,
-    },
+    match: emailPattern,
   },
   isFavourite: {
     type: Boolean,
@@ -24,7 +21,7 @@ const contactSchema = new mongoose.Schema({
   },
   contactType: {
     type: String,
-    enum: ['work', 'home', 'personal'],
+    enum: contactTypeList,
     required: true,
     default: 'personal',
   }

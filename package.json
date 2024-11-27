@@ -1,7 +1,7 @@
 {
   "name": "nodejs-hw-mongodb",
   "version": "1.0.0",
-  "description": "branch hw3-crud",
+  "description": "branch hw4-validation",
   "main": "src/index.js",
   "type": "module",
   "scripts": {
@@ -28,6 +28,7 @@
     "express-rate-limit": "^7.4.1",
     "helmet": "^8.0.0",
     "http-errors": "^2.0.0",
+    "joi": "^17.13.3",
     "mongoose": "^8.1.1",
     "pino": "^9.5.0",
     "pino-http": "^10.3.0"
