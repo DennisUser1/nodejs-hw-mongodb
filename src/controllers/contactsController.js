@@ -9,7 +9,6 @@ import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
 import httpErrors from 'http-errors';
-import mongoose from 'mongoose';
 
 export const getAllContactsController = async (req, res, next) => {
   try {
@@ -40,9 +39,6 @@ export const getContactByIdController = async (req, res, next) => {
   try {
     const { contactId } = req.params;
 
-    if (!mongoose.Types.ObjectId.isValid(contactId)) {
-      return next(httpErrors(400, 'Invalid ID format'));
-  }
 
     const contact = await getContactByIdService(contactId);
     if (!contact) {
@@ -84,6 +80,7 @@ export const createContactController = async (req, res, next) => {
 
 export const updateContactController = async (req, res, next) => {
   try {
+
     const { contactId } = req.params;
     const { name, phoneNumber, email, isFavourite, contactType } = req.body;
     const updatedContact = await updateContactService(contactId, { name, phoneNumber, email, isFavourite, contactType });
@@ -104,10 +101,6 @@ export const updateContactController = async (req, res, next) => {
 export const deleteContactController = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-
-    if (!mongoose.Types.ObjectId.isValid(contactId)) {
-      return next(httpErrors(400, 'Invalid ID format'));
-    }
     
     const deletedContact = await deleteContactService(contactId);
     if (!deletedContact) {

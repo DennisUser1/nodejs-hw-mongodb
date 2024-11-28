@@ -5,15 +5,14 @@ import { sortOrderList } from '../constants/constants.js';
 export const getAllContactsService = async ({
   page = 1,
   perPage = 10,
-  sortBy = '_id',
+  sortBy = 'name',
   sortOrder = sortOrderList[0],
   filter = {},
 }) => {
-  
   if (!sortOrderList.includes(sortOrder)) {
     sortOrder = sortOrderList[0];
   }
-  
+
   const contactsQuery = ContactsCollection.find();
   if (typeof filter.contactType !== 'undefined') {
     contactsQuery.where('contactType').equals(filter.contactType);
@@ -23,14 +22,14 @@ export const getAllContactsService = async ({
   }
 
   const skip = page > 0 ? (page - 1) * perPage : 0;
-  const [total, contacts] = await Promise.all([
-    ContactsCollection.find(contactsQuery).countDocuments(),
-    contactsQuery
-      .skip(skip)
-      .limit(perPage)
-      .sort({ [sortBy]: sortOrder === sortOrderList[1] ? -1 : 1 })
-      .exec(),
-  ]);
+  const total = await ContactsCollection.countDocuments(
+    contactsQuery.getFilter(),
+  );
+  const contacts = await contactsQuery
+    .skip(skip)
+    .limit(perPage)
+    .sort({ [sortBy]: sortOrder === sortOrderList[1] ? -1 : 1 })
+    .exec();
 
   const paginationData = calculatePaginationData({ total, page, perPage });
 
