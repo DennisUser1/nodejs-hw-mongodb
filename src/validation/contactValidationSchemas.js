@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { contactTypeList, phoneNumberPattern, emailPattern } from '../constants/constants.js';
+import { contactTypeList, phoneNumberPattern, emailPattern } from '../constants/contactsConstants.js';
 
 export const createContactSchema = Joi.object({
   name: Joi.string().min(3).max(20).required().messages({
@@ -18,6 +18,7 @@ export const createContactSchema = Joi.object({
     'any.required': `"phoneNumber" is a required field`,
   }),
   email: Joi.string().pattern(emailPattern).optional().messages({
+    'string.base': `email must be a string`,
     'string.pattern.base': `"email" must be a valid email address`,
   }),
   isFavourite: Joi.boolean().optional().messages({

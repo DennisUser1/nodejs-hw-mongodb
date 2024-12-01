@@ -5,3 +5,4 @@ export const sortByList = ['_id', 'name', 'phoneNumber', 'email', 'isFavourite',
 
 export const phoneNumberPattern = /^\+380\d{9}$/;
 export const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+

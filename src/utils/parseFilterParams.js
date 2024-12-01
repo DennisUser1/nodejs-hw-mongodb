@@ -1,4 +1,4 @@
-import { contactTypeList, booleanList } from '../constants/constants.js';
+import { contactTypeList, booleanList } from '../constants/contactsConstants.js';
 
 function parseBoolean(value) {
     if (typeof value !== 'string') return;

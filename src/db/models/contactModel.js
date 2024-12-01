@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { contactTypeList, phoneNumberPattern, emailPattern } from '../../constants/constants.js';
+import { contactTypeList, phoneNumberPattern, emailPattern } from '../../constants/contactsConstants.js';
 
 const contactSchema = new mongoose.Schema({
   name: {

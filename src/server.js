@@ -4,7 +4,9 @@ import pino from 'pino';
 import { pinoHttp } from 'pino-http';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
-import contactsRouter from './routes/contacts.js';
+import cookieParser from 'cookie-parser';
+import authRouter from './routers/auth.js';
+import contactsRouter from './routers/contacts.js';
 import notFoundHandler from './middlewares/notFoundHandler.js';
 import errorHandler from './middlewares/errorHandler.js';
 
@@ -23,6 +25,7 @@ export function setupServer() {
   app.use(express.urlencoded({ extended: true }));
   app.use(helmet());
 
+  app.use(cookieParser());
   app.use(cors());
   app.use(pinoHttp({ logger }));
 
@@ -35,6 +38,7 @@ export function setupServer() {
   });
   app.use(limiter);
 
+  app.use('/auth', authRouter);
   app.use('/contacts', contactsRouter);
   app.use('*', notFoundHandler);
   app.use(errorHandler);
