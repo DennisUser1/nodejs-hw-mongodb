@@ -3,12 +3,12 @@ import calculatePaginationData from '../utils/calculatePaginationData.js';
 import { sortOrderList } from '../constants/contactsConstants.js';
 
 export const getAllContactsService = async ({
+  userId,
   page = 1,
   perPage = 10,
   sortBy = 'name',
   sortOrder = sortOrderList[0],
   filter = {},
-  userId,
 }) => {
   if (!sortOrderList.includes(sortOrder)) {
     sortOrder = sortOrderList[0];

@@ -79,7 +79,7 @@ export const refreshSessionService = async ({ sessionId, refreshToken }) => {
     throw createHttpError(401, 'Invalid or Refresh token expired');
   }
 
-  await SessionCollection.deleteOne({ _id: sessionId });
+  await SessionCollection.deleteOne({ _id: sessionId, refreshToken });
   const newSession = createSession();
   await SessionCollection.create({
     userId: session.userId,
@@ -93,11 +93,8 @@ export const refreshSessionService = async ({ sessionId, refreshToken }) => {
 };
 
 export const logoutUserService = async (sessionId, refreshToken) => {
-  const result = await SessionCollection.deleteOne({
+  await SessionCollection.deleteOne({
     _id: sessionId,
     refreshToken,
   });
-  if (result.deletedCount === 0) {
-    throw createHttpError(401, 'Logout failed: invalid session or token');
-  }
 };

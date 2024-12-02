@@ -5,8 +5,8 @@ import { pinoHttp } from 'pino-http';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import cookieParser from 'cookie-parser';
-import authRouter from './routers/auth.js';
-import contactsRouter from './routers/contacts.js';
+import authRouter from './routes/auth.js';
+import contactsRouter from './routes/contacts.js';
 import notFoundHandler from './middlewares/notFoundHandler.js';
 import errorHandler from './middlewares/errorHandler.js';
 
