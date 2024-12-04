@@ -1,4 +1,4 @@
-import mongoose, { model } from 'mongoose';
+import mongoose from 'mongoose';
 import { emailPatternUserModel } from '../../constants/authConstants.js';
 
 const userSchema = new mongoose.Schema(
@@ -21,5 +21,5 @@ const userSchema = new mongoose.Schema(
 { timestamps: true, versionKey: false },
 );
 
-const UserCollection = model('User', userSchema); // users
+const UserCollection = mongoose.model('User', userSchema); // users
 export default UserCollection;

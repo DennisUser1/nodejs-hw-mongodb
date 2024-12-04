@@ -8,13 +8,14 @@ import {
   refreshTokenLifeTime,
 } from '../constants/authConstants.js';
 
-const createSession = () => {
+const createSession = (userId) => {
   const accessToken = crypto.randomBytes(30).toString('base64');
   const refreshToken = crypto.randomBytes(30).toString('base64');
-  const accessTokenValidUntil = Date.now() + accessTokenLifeTime;
-  const refreshTokenValidUntil = Date.now() + refreshTokenLifeTime;
+  const accessTokenValidUntil = new Date(Date.now() + accessTokenLifeTime);
+  const refreshTokenValidUntil = new Date(Date.now() + refreshTokenLifeTime);
 
   return {
+    userId,
     accessToken,
     refreshToken,
     accessTokenValidUntil,
@@ -56,41 +57,30 @@ export const loginUserService = async (payload) => {
   }
 
   await SessionCollection.deleteOne({ userId: user._id });
-  const newSession = createSession();
+  const newSession = createSession(user._id);
 
-  await SessionCollection.create({
-    userId: user._id,
-    ...newSession,
-  });
-
-  return {
-    accessToken: newSession.accessToken,
-    refreshToken: newSession.refreshToken,
-    refreshTokenId: user._id,
-  };
+  return await SessionCollection.create(newSession);
 };
 
-export const refreshSessionService = async ({ sessionId, refreshToken }) => {
+export const refreshUsersSession = async ({ sessionId, refreshToken }) => {
   const session = await SessionCollection.findOne({
     _id: sessionId,
     refreshToken,
   });
-  if (!session || session.refreshTokenValidUntil <= new Date()) {
-    throw createHttpError(401, 'Invalid or Refresh token expired');
-  }
 
+  if (!session) {
+    throw createHttpError(401, 'Session not found');
+  }
+  const isSessionTokenExpired =
+    new Date() > new Date(session.refreshTokenValidUntil);
+  if (isSessionTokenExpired) {
+    throw createHttpError(401, 'Session token expired');
+  }
+  const newSession = createSession(session.userId);
   await SessionCollection.deleteOne({ _id: sessionId, refreshToken });
-  const newSession = createSession();
-  await SessionCollection.create({
-    userId: session.userId,
-    ...newSession,
-  });
-  return {
-    accessToken: newSession.accessToken,
-    refreshToken: newSession.refreshToken,
-    refreshTokenId: newSession._id,
-  };
+  return await SessionCollection.create(newSession);
 };
+
 
 export const logoutUserService = async (sessionId, refreshToken) => {
   await SessionCollection.deleteOne({

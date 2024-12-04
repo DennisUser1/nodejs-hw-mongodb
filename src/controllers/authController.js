@@ -2,7 +2,7 @@ import httpErrors from 'http-errors';
 import {
   registerUserService,
   loginUserService,
-  refreshSessionService,
+  refreshUsersSession,
   logoutUserService,
 } from '../services/auth.js';
 
@@ -68,13 +68,12 @@ export const loginUserController = async (req, res, next) => {
   }
 };
 
-export const refreshSessionController = async (req, res, next) => {
-  try {
-    const { sessionId, refreshToken } = req.cookies;
-    if (!refreshToken) {
-      throw httpErrors(400, 'No refresh token found');
-    }
-    const session = await refreshSessionService({ sessionId, refreshToken });
+export const refreshSessionController = async (req, res) => {
+    const session = await refreshUsersSession({
+      sessionId: req.cookies.sessionId,
+      refreshToken: req.cookies.refreshToken,
+    });
+
     setupSession(res, session);
 
     res.json({
@@ -84,23 +83,12 @@ export const refreshSessionController = async (req, res, next) => {
         accessToken: session.accessToken,
       },
     });
-  } catch (error) {
-    next(error);
-  }
 };
 
-export const logoutUserController = async (req, res, next) => {
-  try {
-    const { sessionId, refreshToken } = req.cookies;
-    if (!sessionId || !refreshToken) {
-      throw httpErrors(400, 'Session ID and refresh token are required');
-    }
-    await logoutUserService(sessionId, refreshToken);
+export const logoutUserController = async (req, res) => {
+    await logoutUserService(req.cookies.sessionId);
+
     res.clearCookie('sessionId');
     res.clearCookie('refreshToken');
-
-    return res.status(204).send();
-  } catch (error) {
-    next(error);
-  }
+    res.status(204).send();
 };

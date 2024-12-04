@@ -1,5 +1,5 @@
 import {
-  getContactByIdService,
+  getContactService,
   getAllContactsService,
   createContactService,
   updateContactService,
@@ -36,12 +36,12 @@ export const getAllContactsController = async (req, res, next) => {
   }
 };
 
-export const getContactByIdController = async (req, res, next) => {
+export const getContactController = async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const userId = req.user.id;
 
-    const contact = await getContactByIdService(contactId, userId);
+    const contact = await getContactService(contactId, userId);
     if (!contact) {
       throw httpErrors(404, `Contact with id ${contactId} not found`);
     }
