@@ -15,10 +15,10 @@ export const getAllContactsService = async ({
   }
 
   const contactsQuery = ContactsCollection.find({ userId });
-  if (typeof filter.type !== 'undefined') {
+  if (filter.type) {
     contactsQuery.where('contactType').equals(filter.type);
   }
-  if (typeof filter.isFavourite !== 'undefined') {
+  if (filter.isFavourite !== undefined) {
     contactsQuery.where('isFavourite').equals(filter.isFavourite === 'true');
   }
 
