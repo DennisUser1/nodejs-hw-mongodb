@@ -1,4 +1,4 @@
-import createHttpErrors from 'http-errors';
+import createHttpError from 'http-errors';
 
 export function validateBody(schema) {
   return (req, res, next) => {
@@ -6,7 +6,7 @@ export function validateBody(schema) {
 
     if (typeof result.error !== 'undefined') {
       return next(
-        createHttpErrors(
+        createHttpError(
           400,
           result.error.details.map((err) => err.message).join('---'),
         ),

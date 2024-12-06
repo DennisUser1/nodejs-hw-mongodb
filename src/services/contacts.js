@@ -19,7 +19,7 @@ export const getAllContactsService = async ({
     contactsQuery.where('contactType').equals(filter.type);
   }
   if (filter.isFavourite !== undefined) {
-    contactsQuery.where('isFavourite').equals(filter.isFavourite === 'true');
+    contactsQuery.where('isFavourite').equals(filter.isFavourite);
   }
 
   const skip = page > 0 ? (page - 1) * perPage : 0;
