@@ -4,6 +4,8 @@ import {
   loginUserService,
   refreshUsersSession,
   logoutUserService,
+  requestResetPasswordEmailService,
+  resetPasswordService,
 } from '../services/auth.js';
 
 const isProduction = process.env.PRODUCTION;
@@ -69,26 +71,46 @@ export const loginUserController = async (req, res, next) => {
 };
 
 export const refreshSessionController = async (req, res) => {
-    const session = await refreshUsersSession({
-      sessionId: req.cookies.sessionId,
-      refreshToken: req.cookies.refreshToken,
-    });
+  const session = await refreshUsersSession({
+    sessionId: req.cookies.sessionId,
+    refreshToken: req.cookies.refreshToken,
+  });
 
-    setupSession(res, session);
+  setupSession(res, session);
 
-    res.json({
-      status: 200,
-      message: 'Successfully refreshed a session!',
-      data: {
-        accessToken: session.accessToken,
-      },
-    });
+  res.json({
+    status: 200,
+    message: 'Successfully refreshed a session!',
+    data: {
+      accessToken: session.accessToken,
+    },
+  });
 };
 
 export const logoutUserController = async (req, res) => {
-    await logoutUserService(req.cookies.sessionId);
+  await logoutUserService(req.cookies.sessionId);
 
-    res.clearCookie('sessionId');
-    res.clearCookie('refreshToken');
-    res.status(204).send();
+  res.clearCookie('sessionId');
+  res.clearCookie('refreshToken');
+  res.status(204).send();
+};
+
+export const sendResetPasswordEmailController = async (req, res) => {
+  await requestResetPasswordEmailService(req.body.email);
+
+  res.json({
+    message: 'Reset password email was successfully sent!',
+    status: 200,
+    data: {},
+  });
+};
+
+export const resetPasswordController = async (req, res) => {
+  await resetPasswordService(req.body);
+
+  res.json({
+    message: 'Password was successfully reset!',
+    status: 200,
+    data: {},
+  });
 };
