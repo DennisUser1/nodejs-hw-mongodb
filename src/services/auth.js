@@ -122,8 +122,7 @@ export const requestResetPasswordEmailService = async (email) => {
     name: user.name,
     link: `${process.env.APP_DOMAIN}/reset-password?token=${resetToken}`,
   });
-
-  console.log('Generated email HTML:', html);
+  // console.log('Generated email HTML:', html);
 
   try {
     await sendEmail({
@@ -132,10 +131,11 @@ export const requestResetPasswordEmailService = async (email) => {
       subject: 'Reset your password',
       html,
     });
-  } catch {
+  } catch (error) {
+    console.error('Error sending email:', error);
     throw createHttpError(
       500,
-      'Failed to send the email, please try again later.',
+      `Failed to send the email, please try again later. Error: ${error.message}`,
     );
   }
 };
