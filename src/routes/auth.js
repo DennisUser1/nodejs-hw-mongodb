@@ -22,7 +22,7 @@ router.post('/register', validateBody(userRegisterSchema), ctrlWrapper(registerU
 router.post('/login', validateBody(userLoginSchema), ctrlWrapper(loginUserController));
 router.post('/refresh', ctrlWrapper(refreshSessionController));
 router.post('/logout', ctrlWrapper(logoutUserController));
-router.post('/send-reset-email', validateBody( sendResetPasswordEmailSchema), ctrlWrapper(sendResetPasswordEmailController));
+router.post('/send-reset-email', validateBody(sendResetPasswordEmailSchema), ctrlWrapper(sendResetPasswordEmailController));
 router.post('/reset-pwd', validateBody(setNewPasswordSchema), ctrlWrapper(resetPasswordController));
 
 export default router;
