@@ -14,7 +14,7 @@ tags:
       description: Authentication and token management endpoints.
 servers:
   - url: http://localhost:3000
-  - url: https://example.com/api/v1
+  - url: https://contacts-rest-api-lxrx.onrender.com
 paths:
     /contacts/{contactId}:
       get:

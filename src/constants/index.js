@@ -24,3 +24,6 @@ export const PATH_JSON = path.join(process.cwd(), 'config', 'google-oauth.json')
 
 // Swagger Doc
 export const SWAGGER_PATH = path.resolve('docs', 'swagger.json');
+
+// Static folder Public
+export const PUBLIC_PATH = path.join(process.cwd(), 'public');
