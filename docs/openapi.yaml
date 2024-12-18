@@ -1,0 +1,35 @@
+openapi: 3.1.0
+info:
+  version: 1.0.0
+  title: Contacts App API
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  description:
+    This is a documentation of contacts app. Manage user contacts and authentication, including endpoints for creating, retrieving, updating, and deleting contacts.
+tags:
+    - name: Contacts
+      description: "Operations about contacts. Manage user contacts: create, retrieve, update, and delete."
+    - name: Auth
+      description: Authentication and token management endpoints.
+servers:
+  - url: http://localhost:3000
+  - url: https://example.com/api/v1
+paths:
+    /contacts/{contactId}:
+      get:
+        $ref: ../swagger/paths/contacts/{id}/get.yaml
+      patch:
+        $ref: ../swagger/paths/contacts/{id}/patch.yaml
+      delete:
+        $ref: ../swagger/paths/contacts/{id}/delete.yaml
+    /contacts:
+      get:
+        $ref: ../swagger/paths/contacts/get.yaml
+      post:
+        $ref: ../swagger/paths/contacts/post.yaml
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer

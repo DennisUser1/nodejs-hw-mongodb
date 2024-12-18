@@ -9,10 +9,14 @@ import UserCollection from '../db/models/userModel.js';
 import SessionCollection from '../db/models/sessionModel.js';
 import {
   accessTokenLifeTime,
-  refreshTokenLifeTime,
-  TEMPLATES_DIR,
+  refreshTokenLifeTime
 } from '../constants/authConstants.js';
+import { TEMPLATES_DIR } from '../constants/index.js';
 import { sendEmail } from '../utils/sendMail.js';
+import {
+  getFullNameFromGoogleTokenPayload,
+  validateCode,
+} from '../utils/googleOAuth2.js';
 
 const createSession = (userId) => {
   const accessToken = crypto.randomBytes(30).toString('base64');
@@ -115,7 +119,9 @@ export const requestResetPasswordEmailService = async (email) => {
     TEMPLATES_DIR,
     'reset-password-email.html',
   );
-  const templateSource = (await fs.readFile(resetPasswordTemplatePath)).toString();
+  const templateSource = (
+    await fs.readFile(resetPasswordTemplatePath)
+  ).toString();
 
   const template = handlebars.compile(templateSource);
   const html = template({
@@ -166,4 +172,25 @@ export const resetPasswordService = async (resetData) => {
   );
 
   await SessionCollection.deleteMany({ userId: user._id });
+};
+
+export const loginOrSignupWithGoogle = async (code) => {
+  const loginTicket = await validateCode(code);
+  const payload = loginTicket.getPayload();
+  
+  if (!payload) throw createHttpError(401, 'Unauthorized');
+  let user = await UserCollection.findOne({ email: payload.email });
+
+  if (!user) {
+    const password = await bcrypt.hash(crypto.randomBytes(10).toString('base64'), 10);
+    user = await UserCollection.create({
+      email: payload.email,
+      name: getFullNameFromGoogleTokenPayload(payload),
+      password,
+    });
+  }
+  const newSession = createSession(user._id);
+  const session = await SessionCollection.create(newSession);
+
+  return session;
 };

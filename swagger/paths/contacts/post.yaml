@@ -1,0 +1,103 @@
+tags:
+  - Contacts 
+summary: Create a contact
+operationId: createContact
+description: 'Create a contact using JSON or multipart form data.'
+security: 
+  - bearerAuth: []
+requestBody:
+  required: true
+  content: 
+    multipart/form-data:
+      schema: 
+        type: object 
+        required: 
+          - name
+          - phoneNumber
+          - contactType
+        properties:
+          name:
+            description: "Contact's name"
+            type: string
+            example: 'Jane Smith'
+          phoneNumber:
+            description: "Contact's phone number"
+            type: string
+            example: '+380964567890'
+          email:
+            description: "Contact's email"
+            type: string
+            example: 'vasyl9@example.com'
+          isFavourite:
+            description: "Is contact favourite or not"
+            type: boolean
+          contactType:
+            description: "Type of the contact"
+            type: string
+            example: 'personal'
+            enum: ['work', 'home', 'personal']
+          photo:
+            description: "Link to contacts's photo"
+            type: string
+            format: binary
+            example: https://res.cloudinary.com/account-name/image/upload/v1734014671/name-images.png
+responses: 
+  '201':
+    description: 'Created a contact'
+    content: 
+      application/json:
+        schema: 
+          type: object
+          required: 
+            - status
+            - message
+            - data
+          properties: 
+            status:
+              type: integer
+              example: 201
+            message:
+              type: string
+              example: 'Successfully created a contact!'
+            data:
+              $ref: ../../components/schemas/contact.yaml
+  '400': 
+    description: 'Bad request error. Invalid request format'
+    content: 
+      application/json:
+        schema: 
+          type: object
+          required: 
+            - status
+            - message
+          properties:
+            status:
+              type: integer
+              example: 400
+            message:
+              type: string
+              example: '"contactType" must be one of [work, home, personal]---"contactType" is not allowed to be empty'
+  '401':
+    $ref: "../../components/responses/401.yaml"
+  '404':
+    description: 'Contact not found'
+    content: 
+      application/json:
+        schema: 
+          type: object
+          required: 
+            - status
+            - message
+            - data
+          properties: 
+            status: 
+              type: integer
+              example: 404
+            message:
+              type: string
+              example: 'Contact not found'
+            data:
+                type: object
+                example: {}
+  '500':
+    $ref: "../../components/responses/500.yaml"           

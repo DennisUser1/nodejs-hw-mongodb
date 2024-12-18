@@ -1,0 +1,54 @@
+type: object
+required:
+  - _id
+  - name
+  - phoneNumber
+  - contactType
+  - userId
+properties:
+  _id:
+    description: "Unique ID of the contact"
+    type: string
+    example: '67497b3118c0b0e6d372cff9'
+  name:
+    description: "Contact's full name"
+    type: string
+    example: 'John Doe'
+  phoneNumber:
+    description: "Contact's phone number. Must be a valid Ukrainian phone number starting with +380."
+    type: string
+    example: '+380066024930'
+    pattern: '^\\+380\\d{9}$'
+  email:
+    description: "Contact's email address"
+    type: string
+    example: 'johndoe@gmail.com'
+  isFavourite:
+    description: 'Is contact favourite or not'
+    type: boolean
+    example: false
+  contactType:
+    description: "Contact's type"
+    type: string
+    enum: ['work', 'home', 'personal']
+    example: 'personal'
+    default: 'personal'
+  userId:
+    description: "Unique ID of the contact's owner id"
+    type: string
+    example: '674f127795946d5e37d87412'
+  photo:
+    description: "Contact's photo URL"
+    type: string
+    example: https://res.cloudinary.com/account-name/image/upload/v-version/name-images.jpg
+    default: null
+  createdAt:
+    description: Timestamp when the contact was created (ISO 8601).
+    type: string
+    format: date-time
+    example: "2024-12-01T12:34:56Z"
+  updatedAt:
+    description: Timestamp when the contact was last updated (ISO 8601).
+    type: string
+    format: date-time
+    example: "2024-12-02T08:15:30Z"
