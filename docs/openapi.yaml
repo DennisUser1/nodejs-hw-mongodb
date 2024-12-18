@@ -13,7 +13,7 @@ tags:
     - name: Auth
       description: Authentication and token management endpoints.
 servers:
-  - url: http://localhost:3000
+  - url: http://localhost:8080
   - url: https://contacts-rest-api-lxrx.onrender.com
 paths:
     /contacts/{contactId}:
