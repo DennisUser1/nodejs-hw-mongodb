@@ -1,25 +1,25 @@
 description: Internal Server Error
-content: 
+content:
   application/json:
-    schema: 
+    schema:
       type: object
-      required: 
+      required:
         - status
         - message
         - data
-      properties: 
+      properties:
         status:
           type: integer
           example: 500
         message:
           type: string
-          example: Something went wrong
+          example: Internal Server Error
         data:
           type: object
-          required: 
+          required:
             -  message
-          properties: 
+          properties:
             message:
               type: string
-              example: 'Internal Server Error'
+              example: 'Something went wrong'
 

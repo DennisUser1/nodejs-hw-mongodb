@@ -40,8 +40,8 @@ properties:
   photo:
     description: "Contact's photo URL"
     type: string
-    example: https://res.cloudinary.com/account-name/image/upload/v-version/name-images.jpg
-    default: null
+    example: 'https://res.cloudinary.com/dvddocxwe/image/upload/v1733690485/cld-sample-3.jpg'
+    # default: null
   createdAt:
     description: Timestamp when the contact was created (ISO 8601).
     type: string
