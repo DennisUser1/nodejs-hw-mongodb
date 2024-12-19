@@ -2,14 +2,14 @@ tags:
   - Contacts
 summary: Update a contact
 operationId: updateContact
-description: 'Update an existing contact using JSON or multipart form data.'
+description: 'Update an existing contact by its ID using JSON or multipart form data.'
 security:
   - bearerAuth: []
 parameters:
   - in: path
     name: contactId
     required: true
-    description: The ID of the contact to update
+    description: The unique ID of the contact to update
     schema:
       type: string
       example: 672e559aefd1ec206c1b77a8
@@ -18,10 +18,6 @@ requestBody:
     multipart/form-data:
       schema:
         type: object
-        required:
-          - name
-          - phoneNumber
-          - contactType
         properties:
           name:
             type: string

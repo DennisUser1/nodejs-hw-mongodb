@@ -124,7 +124,7 @@
         ],
         "summary": "Update a contact",
         "operationId": "updateContact",
-        "description": "Update an existing contact using JSON or multipart form data.",
+        "description": "Update an existing contact by its ID using JSON or multipart form data.",
         "security": [
           {
             "bearerAuth": []
@@ -135,7 +135,7 @@
             "in": "path",
             "name": "contactId",
             "required": true,
-            "description": "The ID of the contact to update",
+            "description": "The unique ID of the contact to update",
             "schema": {
               "type": "string",
               "example": "672e559aefd1ec206c1b77a8"
@@ -147,11 +147,6 @@
             "multipart/form-data": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "name",
-                  "phoneNumber",
-                  "contactType"
-                ],
                 "properties": {
                   "name": {
                     "type": "string",
@@ -379,7 +374,7 @@
               "type": "integer",
               "example": 1
             },
-            "description": "Current page"
+            "description": "Current page. Default is 1"
           },
           {
             "in": "query",
@@ -388,7 +383,7 @@
               "type": "integer",
               "example": 10
             },
-            "description": "Items per page"
+            "description": "Number of contacts per page. Default is 10"
           },
           {
             "in": "query",
@@ -417,7 +412,8 @@
                 "asc",
                 "desc"
               ],
-              "example": "asc"
+              "example": "asc",
+              "description": "Sorting order. Default is \"asc\"."
             }
           },
           {
@@ -476,26 +472,32 @@
                         },
                         "page": {
                           "type": "integer",
-                          "example": 50
+                          "description": "Current page number.",
+                          "example": 1
                         },
                         "perPage": {
                           "type": "integer",
+                          "description": "Number of contacts per page.",
                           "example": 5
                         },
                         "totalItems": {
                           "type": "integer",
+                          "description": "Total number of contacts matching the filters.",
                           "example": 1
                         },
                         "totalPages": {
                           "type": "integer",
+                          "description": "Total number of pages.",
                           "example": 10
                         },
                         "hasPreviousPage": {
                           "type": "boolean",
+                          "description": "Indicates if there is a previous page.",
                           "example": false
                         },
                         "hasNextPage": {
                           "type": "boolean",
+                          "description": "Indicates if there is a next page.",
                           "example": true
                         }
                       }
@@ -567,7 +569,7 @@
                 ],
                 "properties": {
                   "name": {
-                    "description": "Contact's name",
+                    "description": "Contact's full name",
                     "type": "string",
                     "example": "Jane Smith"
                   },
@@ -577,7 +579,7 @@
                     "example": "+380964567890"
                   },
                   "email": {
-                    "description": "Contact's email",
+                    "description": "Contact's email address",
                     "type": "string",
                     "example": "vasyl9@example.com"
                   },
